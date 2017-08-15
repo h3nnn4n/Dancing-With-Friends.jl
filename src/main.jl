@@ -13,11 +13,11 @@ end
 dist(x1, y1, x2, y2) = sqrt((x1 - x2)^2.0 + (y1 - y2)^2.0)
 
 function main()
-    population_size = 1000
+    population_size = 100
     dancers = init_population(population_size)
 
-    center_x = 0.0
-    center_y = 0.0
+    center_x = 1.0
+    center_y = 1.0
 
     friend_stop = 0.01
     center_stop = 0.01
@@ -51,8 +51,8 @@ function main()
 
             if e_distance > enemy_stop
                 angle = acos(dot(t, en) / (norm(t) * norm(en)))
-                dancers[i].x += cos(angle) * enemy_speed
-                dancers[i].y += sin(angle) * enemy_speed
+                dancers[i].x += cos(angle) * -enemy_speed
+                dancers[i].y += sin(angle) * -enemy_speed
             end
 
             if c_distance > center_stop
@@ -60,7 +60,13 @@ function main()
                 dancers[i].x += cos(angle) * center_speed
                 dancers[i].y += sin(angle) * center_speed
             end
+            #=@printf("%f %f\n", dancers[i].x, dancers[i].y)=#
         end
+        #=@printf("\n")=#
+    end
+
+    for i in 1:population_size
+        @printf("%f %f\n", dancers[i].x, dancers[i].y)
     end
 end
 
