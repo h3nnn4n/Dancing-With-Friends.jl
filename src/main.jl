@@ -25,11 +25,26 @@ function main()
 
     friend_speep = 0.6
     enemy_speed  = 0.1
-    center_speed = 0.05
+    center_speed = 0.01
 
-    iters = 100
+    iters = 10000
+
+    base_name = "dwf_"
+
+    @printf("Starting...\n")
 
     for iter in 1:iters
+        out = open(@sprintf("%s_%06d", base_name, iter), "w")
+
+        if iter == 1 || iter % 100 == 0
+            #=@printf("%4d/%4d\n", iter, iters)=#
+            s = 0
+            for i in 1:population_size
+                s += dist(dancers[i].x, dancers[i].y, center_x, center_y)
+            end
+            println(s/population_size)
+        end
+
         for i in 1:population_size
             target = dancers[i]
             friend = dancers[target.friend]
@@ -60,14 +75,22 @@ function main()
                 dancers[i].x += cos(angle) * center_speed
                 dancers[i].y += sin(angle) * center_speed
             end
-            #=@printf("%f %f\n", dancers[i].x, dancers[i].y)=#
+
+            @printf(out, "%f %f\n", dancers[i].x, dancers[i].y)
+
+            if rand() < 0.01
+                dancers[i].friend = rand(1:population_size)
+                dancers[i].enemy  = rand(1:population_size)
+            end
         end
+        close(out)
         #=@printf("\n")=#
     end
 
-    for i in 1:population_size
-        @printf("%f %f\n", dancers[i].x, dancers[i].y)
-    end
+    #=for i in 1:population_size=#
+        #=@printf("%f %f\n", dancers[i].x, dancers[i].y)=#
+    #=end=#
+    @printf("Finished\n")
 end
 
 main()
